@@ -6,11 +6,10 @@ type Cache struct {
 key string
 value string
 deadline time.Time
-
 }
 
 func NewCache() Cache {
-	return Cache{structure: map[string]Cache}
+	return Cache{structure: make(map[string]Cache)}
 }
 
 func (f Cache) Get(key string) (string, bool) {
