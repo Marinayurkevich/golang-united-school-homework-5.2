@@ -24,12 +24,16 @@ return " ", false
 }
 
 func (f Cache) Put(key, value string) {
+
 }
 
 func (f Cache) Keys() []string {
 keys := make ([]string, 0)
 for key, _ := range f.structure {
-keys = append(keys, key)}
+if key >=deadline{
+delete(f.structure,key)
+} else {
+keys = append(keys, key)}}
 return keys
 }
 
