@@ -2,17 +2,22 @@ package cache
 
 import "time"
 
-type Cache struct {
+type MyCache struct{
 key string
 value string
 deadline time.Time
 }
 
+type Cache struct {
+structure map[string]MyCache
+}
+
 func NewCache() Cache {
-	return Cache{make(map[string]Cache)}
+	return Cache{make(map[string]MyCache)}
 }
 
 func (f Cache) Get(key string) (string, bool) {
+key, ok:= f.structure[key]
 if !ok {
 return " ", false
 }
