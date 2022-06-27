@@ -28,7 +28,7 @@ func (f Cache) Put(key, value string) {
 
 func (f Cache) Keys() []string {
 keys := make ([]string, 0)
-for key, value := range f.structure {
+for key, _ := range f.structure {
 keys = append(keys, key)}
 return keys
 }
