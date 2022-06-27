@@ -9,7 +9,7 @@ deadline time.Time
 }
 
 func NewCache() Cache {
-	return Cache{structure: make(map[string]Cache)}
+	return Cache{make(map[string]Cache)}
 }
 
 func (f Cache) Get(key string) (string, bool) {
