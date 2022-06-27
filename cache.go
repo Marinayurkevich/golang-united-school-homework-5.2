@@ -10,10 +10,10 @@ func NewCache() Cache {
 }
 
 func (f Cache) Get(key string) (string, bool) {
-if ok {
-return Cache.value, true
+if !ok {
+return " ", false
 }
-else return " ", false
+return Cache.value, true
 }
 
 func (f Cache) Put(key, value string) {
