@@ -3,10 +3,14 @@ package cache
 import "time"
 
 type Cache struct {
+key string
+value string
+deadline time.Time
+
 }
 
 func NewCache() Cache {
-	return Cache{}
+	return Cache{structure: map[string]Cache}
 }
 
 func (f Cache) Get(key string) (string, bool) {
