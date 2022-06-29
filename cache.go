@@ -6,6 +6,7 @@ type MyCache struct {
 	key      string
 	value    string
 	deadline time.Time
+	expTime  bool
 }
 
 type Cache struct {
@@ -17,11 +18,17 @@ func NewCache() Cache {
 }
 
 func (f Cache) Get(key string) (string, bool) {
-	MyCache, ok := f.structure[key]
-	if ok {
-		return MyCache.value, true
+	MyCache, _ := f.structure[key]
+	deadline := MyCache.deadline
+	currentTime := time.Now()
+	evaluate := deadline.Sub(currentTime)
+	if evaluate <= 0 {
+		return " ", false
+	} else {
+		value := MyCache.value
+		return value, true
 	}
-	return " ", false
+
 }
 
 func (f Cache) Put(key, value string) {
@@ -31,15 +38,10 @@ func (f Cache) Put(key, value string) {
 func (f Cache) Keys() []string {
 	keys := make([]string, 0)
 	for key, _ := range f.structure {
-		if key >= deadline {
-			delete(f.structure, key)
-		} else {
-			keys = append(keys, key)
-		}
+		keys = append(keys, key)
 	}
 	return keys
 }
 
 func (f Cache) PutTill(key, value string, deadline time.Time) {
-
 }
