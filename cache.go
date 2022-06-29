@@ -27,7 +27,7 @@ func (f Cache) Get(key string) (string, bool) {
 	currentTime := time.Now()
 	evaluate := deadline.Sub(currentTime)
 	if evaluate <= 0 {
-		return " ", false
+		return "", false
 	} else {
 		value := MyCache.value
 		return value, true
@@ -38,6 +38,7 @@ func (f Cache) Get(key string) (string, bool) {
 func (f Cache) Put(key, value string) {
 	f.structure[key] = MyCache{
 		expTime: true,
+		value:   value,
 	}
 }
 
@@ -50,5 +51,9 @@ func (f Cache) Keys() []string {
 }
 
 func (f Cache) PutTill(key, value string, deadline time.Time) {
-	f.structure[key] = MyCache{}
+	f.structure[key] = MyCache{
+		expTime:  true,
+		value:    value,
+		deadline: deadline,
+	}
 }
