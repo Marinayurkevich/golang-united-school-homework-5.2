@@ -3,7 +3,6 @@ package cache
 import "time"
 
 type MyCache struct {
-	key      string
 	value    string
 	deadline time.Time
 	expTime  bool
@@ -18,7 +17,12 @@ func NewCache() Cache {
 }
 
 func (f Cache) Get(key string) (string, bool) {
-	MyCache, _ := f.structure[key]
+	MyCache, ok := f.structure[key]
+	expTime := MyCache.expTime
+	if ok || expTime {
+		value := MyCache.value
+		return value, true
+	}
 	deadline := MyCache.deadline
 	currentTime := time.Now()
 	evaluate := deadline.Sub(currentTime)
@@ -32,7 +36,9 @@ func (f Cache) Get(key string) (string, bool) {
 }
 
 func (f Cache) Put(key, value string) {
-
+	f.structure[key] = MyCache{
+		expTime: true,
+	}
 }
 
 func (f Cache) Keys() []string {
@@ -44,4 +50,5 @@ func (f Cache) Keys() []string {
 }
 
 func (f Cache) PutTill(key, value string, deadline time.Time) {
+	f.structure[key] = MyCache{}
 }
