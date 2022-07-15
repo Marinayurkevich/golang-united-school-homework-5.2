@@ -17,22 +17,28 @@ func NewCache() Cache {
 }
 
 func (f Cache) Get(key string) (string, bool) {
+	var value string
 	MyCache, ok := f.structure[key]
 	expTime := MyCache.expTime
-	if ok || expTime {
-		value := MyCache.value
-		return value, true
-	}
-	deadline := MyCache.deadline
-	currentTime := time.Now()
-	evaluate := deadline.Sub(currentTime)
-	if evaluate <= 0 {
-		return "", false
+	if ok {
+		expTime = MyCache.expTime
+		if expTime {
+			value := MyCache.value
+			return value, ok
+		} else {
+			deadline := MyCache.deadline
+			timeNow := time.Now()
+			expired := deadline.Sub(timeNow).Microseconds()
+			if expired > 0 {
+				value = MyCache.value
+				return value, ok
+			} else {
+				return value, false
+			}
+		}
 	} else {
-		value := MyCache.value
-		return value, true
+		return value, ok
 	}
-
 }
 
 func (f Cache) Put(key, value string) {
