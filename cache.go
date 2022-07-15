@@ -13,17 +13,16 @@ type Cache struct {
 }
 
 func NewCache() Cache {
-	return Cache{make(map[string]MyCache)}
+	return Cache{structure: make(map[string]MyCache)}
 }
 
 func (f Cache) Get(key string) (string, bool) {
 	var value string
 	MyCache, ok := f.structure[key]
-	expTime := MyCache.expTime
 	if ok {
-		expTime = MyCache.expTime
+		expTime := MyCache.expTime
 		if expTime {
-			value := MyCache.value
+			value = MyCache.value
 			return value, ok
 		} else {
 			deadline := MyCache.deadline
@@ -42,24 +41,29 @@ func (f Cache) Get(key string) (string, bool) {
 }
 
 func (f Cache) Put(key, value string) {
+	deadline := time.Now()
 	f.structure[key] = MyCache{
-		expTime: true,
-		value:   value,
+		value:    value,
+		expTime:  true,
+		deadline: deadline,
 	}
 }
 
 func (f Cache) Keys() []string {
-	keys := make([]string, 0)
+	var keys []string
 	for key, _ := range f.structure {
-		keys = append(keys, key)
+		_, ok := f.Get(key)
+		if ok {
+			keys = append(keys, key)
+		}
 	}
 	return keys
 }
 
 func (f Cache) PutTill(key, value string, deadline time.Time) {
 	f.structure[key] = MyCache{
-		expTime:  true,
 		value:    value,
 		deadline: deadline,
+		expTime:  false,
 	}
 }
